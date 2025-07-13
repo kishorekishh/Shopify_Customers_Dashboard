@@ -1,0 +1,41 @@
+1. Net_Sales=SUM(shopify_sales[Subtotal Price])
+
+2. Total_Quantity=SUM(shopify_sales[Quantity])
+
+3. Net_Avg_Order_Value=AVERAGE(shopify_sales[Subtotal Price])
+
+4. Transaction_Perf = "Transaction Performace"
+
+5. Total_Customers = DISTINCTCOUNT(shopify_sales[Customer Id])
+
+6. Single_Order_Customers=
+      CALCULATE(COUNTROWS(VALUES(shopify_sales[Customer Id])),
+      Filter(VALUES(shopify_sales[Customer Id]),
+            CALCULATE(DISTINCTCOUNT(shopify_sales[Order Number]))=1
+      ))
+
+7. Repeat_Customers=
+      CALCULATE(COUNTROWS(VALUES(shopify_sales[Customer Id])),
+      Filter(VALUES(shopify_sales[Customer Id]),
+            CALCULATE(DISTINCTCOUNT(shopify_sales[Order Number])) > 1
+      ))
+8. Customer Purchase Behavior = "Customer Purchase Behavior"
+
+9. Life Time Value = [Net_Sales]/[Total_Customers]
+
+10. Repeat Rate = [Repeat_Customers]/[Total_Customers]
+
+11. Dynamic Title = 
+IF('Select Measure'[Select Measure Order]=0,"Net Sales",
+ IF('Select Measure'[Select Measure Order]=1,"Total Qty",
+  IF('Select Measure'[Select Measure Order]=2,"Total Customer",
+   IF('Select Measure'[Select Measure Order]=3,"Repeat Customers","Others"
+   ))))
+
+12. Map Title = "Regional Overview - Province & Cities by " & SELECTEDVALUE('Select Measure'[Dynamic Title])
+
+13. Trend Title = SELECTEDVALUE('Select Measure'[Dynamic Title])&" Trend Over Time"
+
+14. Gateway Title=SELECTEDVALUE('Select Measure'[Dynamic Title])&" by Gateway Payment Method"
+
+15. Product Title = SELECTEDVALUE('Select Measure'[Dynamic Title])& "by Product Type"
